@@ -14,6 +14,8 @@ dependencyResolutionManagement {
 }
 
 include(":app")
+include(":ui")
+include(":core")
 include(":utils")
 
 rootProject.name = "budgeteer"
