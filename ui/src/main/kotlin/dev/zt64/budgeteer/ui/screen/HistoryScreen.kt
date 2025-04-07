@@ -136,7 +136,7 @@ fun TransactionCard(
         },
         supportingContent = transaction.description?.let { { Text(it) } },
         trailingContent = {
-            Text("$${transaction.amount}")
+            Text("$%.2f".format(transaction.amount))
         }
     )
 }
