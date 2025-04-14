@@ -1,22 +1,28 @@
 package dev.zt64.budgeteer.ui.dialog
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Category
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import dev.zt64.budgeteer.domain.model.Category
 import dev.zt64.budgeteer.domain.model.Transaction
+import dev.zt64.budgeteer.ui.iconAsImageVector
+import kotlin.time.ExperimentalTime
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalTime::class)
 @Composable
 fun AddTransactionDialog(
+    categories: List<Category>,
     onConfirm: (Transaction) -> Unit,
     onDismissRequest: () -> Unit
 ) {
     var title by rememberSaveable { mutableStateOf("") }
     var amount by rememberSaveable { mutableStateOf(0.0) }
-    var category by remember { mutableStateOf("") }
+    var category by remember { mutableStateOf<Category?>(null) }
     var description by rememberSaveable { mutableStateOf("") }
 
     val isValid = remember(title, amount, category) {
@@ -33,7 +39,8 @@ fun AddTransactionDialog(
                         Transaction(
                             title = title,
                             amount = amount,
-                            description = description
+                            description = description.ifBlank { null },
+                            category = category
                         )
                     )
                     onDismissRequest()
@@ -43,9 +50,7 @@ fun AddTransactionDialog(
             }
         },
         dismissButton = {
-            OutlinedButton(
-                onClick = onDismissRequest
-            ) {
+            OutlinedButton(onClick = onDismissRequest) {
                 Text("Cancel")
             }
         },
@@ -77,10 +82,19 @@ fun AddTransactionDialog(
                         onExpandedChange = { expanded = it }
                     ) {
                         OutlinedTextField(
-                            value = category,
+                            modifier = Modifier
+                                .menuAnchor(MenuAnchorType.PrimaryEditable)
+                                .fillMaxWidth(),
+                            value = category?.name.orEmpty(),
                             onValueChange = { },
                             label = { Text("Category") },
                             readOnly = true,
+                            leadingIcon = {
+                                Icon(
+                                    imageVector = category?.iconAsImageVector ?: Icons.Default.Category,
+                                    contentDescription = "Category"
+                                )
+                            },
                             trailingIcon = {
                                 ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
                             },
@@ -91,11 +105,11 @@ fun AddTransactionDialog(
                             expanded = expanded,
                             onDismissRequest = { expanded = false }
                         ) {
-                            listOf("Food", "Transport", "Entertainment").forEach { item ->
+                            categories.forEach {
                                 DropdownMenuItem(
-                                    text = { Text(item) },
+                                    text = { Text(it.name) },
                                     onClick = {
-                                        category = item
+                                        category = it
                                         expanded = false
                                     }
                                 )

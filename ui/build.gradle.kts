@@ -9,6 +9,12 @@ plugins {
     alias(libs.plugins.compose)
 }
 
+kotlin {
+    compilerOptions {
+        optIn.add("androidx.compose.material3.ExperimentalMaterial3Api")
+    }
+}
+
 dependencies {
     implementation(project(":core"))
 
@@ -18,6 +24,8 @@ dependencies {
 
     implementation(libs.bundles.koin)
     implementation(libs.bundles.coroutines)
+
+    implementation(libs.koalaPlot.core)
 
     testImplementation(compose.uiTest)
     testImplementation(libs.kotlin.test)

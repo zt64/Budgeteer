@@ -5,6 +5,12 @@ plugins {
     alias(libs.plugins.room)
 }
 
+kotlin {
+    compilerOptions {
+        optIn.add("kotlin.time.ExperimentalTime")
+    }
+}
+
 dependencies {
     ksp(libs.room.compiler)
 

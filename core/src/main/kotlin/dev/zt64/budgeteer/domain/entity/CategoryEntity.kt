@@ -4,8 +4,9 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity
-data class CategoryEntity(
-    @PrimaryKey(autoGenerate = true) val categoryId: Int = 0,
+internal data class CategoryEntity(
+    @PrimaryKey
     val name: String,
+    val icon: String? = null,
     val color: Long
 )

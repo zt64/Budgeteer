@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
@@ -12,9 +13,15 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import dev.zt64.budgeteer.domain.entity.TransactionEntity
+import dev.zt64.budgeteer.domain.model.Transaction
+import dev.zt64.budgeteer.ui.LocalSnackbarHostState
 import dev.zt64.budgeteer.ui.dialog.AddTransactionDialog
+import dev.zt64.budgeteer.ui.iconAsImageVector
+import dev.zt64.budgeteer.ui.navigation.Destination
+import dev.zt64.budgeteer.ui.navigation.LocalNavigationManager
+import dev.zt64.budgeteer.ui.navigation.currentOrThrow
 import dev.zt64.budgeteer.ui.viewmodel.HistoryViewModel
+import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
 
 /**
@@ -24,7 +31,7 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun HistoryScreen() {
     val viewModel = koinViewModel<HistoryViewModel>()
-    val snackbarHostState = remember { SnackbarHostState() }
+    val snackbarHostState = LocalSnackbarHostState.current
 
     Scaffold(
         topBar = {
@@ -50,9 +57,14 @@ fun HistoryScreen() {
         var showDialog by remember { mutableStateOf(false) }
 
         if (showDialog) {
+            val categories by viewModel.categories.collectAsState(emptyList())
             AddTransactionDialog(
+                categories = categories,
                 onConfirm = {
                     viewModel.addTransaction(it)
+                    scope.launch {
+                        snackbarHostState.showSnackbar("Transaction added")
+                    }
                 },
                 onDismissRequest = {
                     showDialog = false
@@ -89,11 +101,14 @@ fun HistoryScreen() {
                     }
                 }
             } else {
+                val navigationManager = LocalNavigationManager.currentOrThrow
+
                 LazyColumn {
                     items(transactions) { transaction ->
                         TransactionCard(
                             transaction = transaction,
                             onClick = {
+                                navigationManager.navigate(Destination.Transaction(transaction.id))
                             }
                         )
                     }
@@ -108,10 +123,14 @@ fun HistoryScreen() {
                             contentAlignment = Alignment.Center
                         ) {
                             Button(
-                                onClick = {
-                                    showDialog = true
-                                }
+                                onClick = { showDialog = true },
+                                contentPadding = ButtonDefaults.ButtonWithIconContentPadding
                             ) {
+                                Icon(
+                                    imageVector = Icons.Default.Add,
+                                    contentDescription = null
+                                )
+                                Spacer(Modifier.width(ButtonDefaults.IconSpacing))
                                 Text("Add Transaction")
                             }
                         }
@@ -123,18 +142,24 @@ fun HistoryScreen() {
 }
 
 @Composable
-fun TransactionCard(
-    transaction: TransactionEntity,
+private fun TransactionCard(
+    transaction: Transaction,
     onClick: () -> Unit
 ) {
     ListItem(
         modifier = Modifier.clickable(onClick = onClick),
         leadingContent = {
+            transaction.category?.iconAsImageVector?.let {
+                Icon(
+                    imageVector = it,
+                    contentDescription = null
+                )
+            }
         },
         headlineContent = {
             Text(transaction.title)
         },
-        supportingContent = transaction.description?.let { { Text(it) } },
+        supportingContent = transaction.description?.takeUnless { it.isEmpty() }?.let { { Text(it) } },
         trailingContent = {
             Text("$%.2f".format(transaction.amount))
         }

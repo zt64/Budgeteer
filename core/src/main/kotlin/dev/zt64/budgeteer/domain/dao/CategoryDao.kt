@@ -5,7 +5,7 @@ import dev.zt64.budgeteer.domain.entity.CategoryEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface CategoryDao {
+internal interface CategoryDao {
     @Insert
     suspend fun insert(category: CategoryEntity)
 
@@ -18,6 +18,6 @@ interface CategoryDao {
     @Query("SELECT * FROM CategoryEntity")
     fun getAllCategories(): Flow<List<CategoryEntity>>
 
-    @Query("SELECT * FROM CategoryEntity WHERE categoryId = :id")
-    suspend fun getCategoryById(id: Int): CategoryEntity?
+    @Query("SELECT * FROM CategoryEntity WHERE name = :name")
+    suspend fun getCategoryById(name: String): CategoryEntity?
 }

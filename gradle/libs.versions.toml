@@ -7,6 +7,7 @@ kotlinx-serialization-json = "1.7.3"
 koin = "4.0.4"
 coroutines = "1.10.1"
 viewmodel = "2.8.4"
+koalaPlot = "0.8.0"
 room = "2.7.0-alpha01"
 sqlite-bundled = "2.4.0"
 
@@ -25,6 +26,8 @@ coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", ve
 coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "coroutines" }
 
 viewmodel = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "viewmodel" }
+
+koalaPlot-core = { module = "io.github.koalaplot:koalaplot-core", version.ref = "koalaPlot" }
 
 room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
