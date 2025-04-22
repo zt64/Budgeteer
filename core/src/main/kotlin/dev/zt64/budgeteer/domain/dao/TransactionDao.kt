@@ -2,6 +2,7 @@ package dev.zt64.budgeteer.domain.dao
 
 import androidx.room.*
 import dev.zt64.budgeteer.domain.entity.TransactionEntity
+import dev.zt64.budgeteer.domain.entity.TransactionWithCategory
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -21,6 +22,10 @@ internal interface TransactionDao {
     @Query("SELECT * FROM TransactionEntity")
     fun getAllTransactions(): Flow<List<TransactionEntity>>
 
+    @Transaction
+    @Query("SELECT * FROM TransactionEntity")
+    fun getAllTransactionsWithCategory(): Flow<List<TransactionWithCategory>>
+
     @Query("SELECT * FROM TransactionEntity WHERE transactionId = :transactionId")
-    suspend fun getTransactionById(transactionId: Int): TransactionEntity?
+    suspend fun getTransactionById(transactionId: Int): TransactionWithCategory?
 }

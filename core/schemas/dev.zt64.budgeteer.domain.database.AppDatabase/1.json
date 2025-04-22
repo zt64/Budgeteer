@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "0df8597c36836dec52bf3ed46d66638f",
+    "identityHash": "5719e5d5d5faf23b6e4ba04095c3410c",
     "entities": [
       {
         "tableName": "TransactionEntity",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`transactionId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `title` TEXT NOT NULL, `amount` REAL NOT NULL, `date` INTEGER NOT NULL, `description` TEXT, `categoryId` INTEGER)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`transactionId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `title` TEXT NOT NULL, `amount` REAL NOT NULL, `isExpense` INTEGER NOT NULL, `date` INTEGER NOT NULL, `description` TEXT, `categoryId` INTEGER)",
         "fields": [
           {
             "fieldPath": "transactionId",
@@ -24,6 +24,12 @@
             "fieldPath": "amount",
             "columnName": "amount",
             "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isExpense",
+            "columnName": "isExpense",
+            "affinity": "INTEGER",
             "notNull": true
           },
           {
@@ -52,8 +58,14 @@
       },
       {
         "tableName": "CategoryEntity",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`name` TEXT NOT NULL, `icon` TEXT, `color` INTEGER NOT NULL, PRIMARY KEY(`name`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`categoryId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `icon` TEXT, `color` INTEGER NOT NULL)",
         "fields": [
+          {
+            "fieldPath": "categoryId",
+            "columnName": "categoryId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
           {
             "fieldPath": "name",
             "columnName": "name",
@@ -73,16 +85,16 @@
           }
         ],
         "primaryKey": {
-          "autoGenerate": false,
+          "autoGenerate": true,
           "columnNames": [
-            "name"
+            "categoryId"
           ]
         }
       }
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0df8597c36836dec52bf3ed46d66638f')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '5719e5d5d5faf23b6e4ba04095c3410c')"
     ]
   }
 }

@@ -2,6 +2,7 @@ package dev.zt64.budgeteer.domain.repository
 
 import dev.zt64.budgeteer.domain.dao.TransactionDao
 import dev.zt64.budgeteer.domain.entity.TransactionEntity
+import dev.zt64.budgeteer.domain.entity.TransactionWithCategory
 import dev.zt64.budgeteer.domain.model.Transaction
 import dev.zt64.budgeteer.domain.toDatabaseEntity
 import dev.zt64.budgeteer.domain.toDomainModel
@@ -17,10 +18,6 @@ class TransactionRepository internal constructor(private val transactionDao: Tra
         transactionDao.update(transaction.toDatabaseEntity())
     }
 
-    suspend fun deleteTransaction(transaction: Transaction) {
-        transactionDao.delete(transaction.toDatabaseEntity())
-    }
-
     suspend fun deleteTransaction(transactionId: Int) {
         transactionDao.delete(transactionId)
     }
@@ -28,6 +25,12 @@ class TransactionRepository internal constructor(private val transactionDao: Tra
     fun getTransactions(): Flow<List<Transaction>> {
         return transactionDao.getAllTransactions().map {
             it.map(TransactionEntity::toDomainModel)
+        }
+    }
+
+    fun getTransactionsWithCategory(): Flow<List<Transaction>> {
+        return transactionDao.getAllTransactionsWithCategory().map {
+            it.map(TransactionWithCategory::toDomainModel)
         }
     }
 

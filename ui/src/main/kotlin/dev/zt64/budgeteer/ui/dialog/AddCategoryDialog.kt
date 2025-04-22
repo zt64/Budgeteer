@@ -6,7 +6,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
 
 @Composable
-fun AddCategoryDialog(onDismissRequest: () -> Unit) {
+internal fun AddCategoryDialog(onDismissRequest: () -> Unit) {
     var name by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
     var color by remember { mutableStateOf(Color.Red) }

@@ -2,21 +2,21 @@ package dev.zt64.budgeteer.ui.navigation
 
 import androidx.compose.runtime.*
 
-val LocalNavigationManager = staticCompositionLocalOf<NavigationManager?> {
+internal val LocalNavigationManager = staticCompositionLocalOf<NavigationManager?> {
     error("No navigation manager provided")
 }
 
 @get:Composable
-val ProvidableCompositionLocal<NavigationManager?>.currentOrThrow
+internal val ProvidableCompositionLocal<NavigationManager?>.currentOrThrow
     get() = current ?: throw IllegalStateException("No NavigationManager provided")
 
 @Composable
-fun rememberNavigationManager(initialDestination: Destination): NavigationManager {
+internal fun rememberNavigationManager(initialDestination: Destination): NavigationManager {
     return remember { NavigationManager(initialDestination) }
 }
 
 @Composable
-fun NavHost(
+internal fun NavHost(
     manager: NavigationManager = rememberNavigationManager(Destination.Home),
     content: @Composable () -> Unit
 ) {
@@ -24,7 +24,7 @@ fun NavHost(
 }
 
 @Stable
-class NavigationManager(initialDestination: Destination) {
+internal class NavigationManager(initialDestination: Destination) {
     private val _destinations = mutableStateListOf(initialDestination)
     val destinations: List<Destination> = _destinations
 

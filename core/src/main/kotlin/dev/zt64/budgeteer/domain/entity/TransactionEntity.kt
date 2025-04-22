@@ -12,6 +12,7 @@ data class TransactionEntity(
     val transactionId: Int = 0,
     val title: String,
     val amount: Double,
+    val isExpense: Boolean = false,
     val date: Instant,
     val description: String? = null,
     val categoryId: Int? = null

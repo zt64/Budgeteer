@@ -11,7 +11,7 @@ plugins {
 
 kotlin {
     compilerOptions {
-        optIn.add("androidx.compose.material3.ExperimentalMaterial3Api")
+        optIn.addAll("androidx.compose.material3.ExperimentalMaterial3Api", "kotlin.time.ExperimentalTime")
     }
 }
 

@@ -15,13 +15,14 @@ import kotlin.time.ExperimentalTime
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalTime::class)
 @Composable
-fun AddTransactionDialog(
+internal fun AddTransactionDialog(
     categories: List<Category>,
     onConfirm: (Transaction) -> Unit,
     onDismissRequest: () -> Unit
 ) {
     var title by rememberSaveable { mutableStateOf("") }
     var amount by rememberSaveable { mutableStateOf(0.0) }
+    var isExpense by rememberSaveable { mutableStateOf(false) }
     var category by remember { mutableStateOf<Category?>(null) }
     var description by rememberSaveable { mutableStateOf("") }
 
@@ -39,6 +40,7 @@ fun AddTransactionDialog(
                         Transaction(
                             title = title,
                             amount = amount,
+                            isExpense = isExpense,
                             description = description.ifBlank { null },
                             category = category
                         )
@@ -61,6 +63,24 @@ fun AddTransactionDialog(
             Column(
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
+                SingleChoiceSegmentedButtonRow {
+                    SegmentedButton(
+                        selected = isExpense,
+                        onClick = { isExpense = true },
+                        shape = SegmentedButtonDefaults.itemShape(0, 2)
+                    ) {
+                        Text("Expense")
+                    }
+
+                    SegmentedButton(
+                        selected = !isExpense,
+                        onClick = { isExpense = false },
+                        shape = SegmentedButtonDefaults.itemShape(1, 2)
+                    ) {
+                        Text("Income")
+                    }
+                }
+
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -121,6 +141,9 @@ fun AddTransactionDialog(
                 OutlinedTextField(
                     value = amount.toString(),
                     onValueChange = { amount = it.toDoubleOrNull() ?: 0.0 },
+                    leadingIcon = {
+                        Text("$")
+                    },
                     label = { Text("Amount") }
                 )
 

@@ -23,7 +23,7 @@ import org.koin.core.parameter.parametersOf
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TransactionScreen(transactionId: Int) {
+internal fun TransactionScreen(transactionId: Int) {
     val viewModel = koinViewModel<TransactionViewModel> { parametersOf(transactionId) }
     val uiState by viewModel.uiState.collectAsState()
 
@@ -89,14 +89,14 @@ fun TransactionScreen(transactionId: Int) {
                                     )
                                 }
 
-                                IconButton(onClick = { viewModel.exitEditMode() }) {
+                                IconButton(onClick = viewModel::exitEditMode) {
                                     Icon(
                                         imageVector = Icons.Default.Close,
                                         contentDescription = "Cancel editing"
                                     )
                                 }
                             } else {
-                                IconButton(onClick = { viewModel.enterEditMode() }) {
+                                IconButton(onClick = viewModel::enterEditMode) {
                                     Icon(
                                         imageVector = Icons.Default.Edit,
                                         contentDescription = "Edit transaction"
@@ -166,7 +166,9 @@ fun TransactionScreen(transactionId: Int) {
 
                     var title by rememberSaveable { mutableStateOf(transaction.title) }
                     var amount by rememberSaveable { mutableStateOf(transaction.amount) }
+                    var isExpense by rememberSaveable { mutableStateOf(transaction.isExpense) }
                     var category by rememberSaveable { mutableStateOf(transaction.category) }
+                    var date by rememberSaveable { mutableStateOf(transaction.date) }
                     var description by rememberSaveable { mutableStateOf(transaction.description.orEmpty()) }
 
                     LaunchedEffect(state.isEditing) {
@@ -179,6 +181,25 @@ fun TransactionScreen(transactionId: Int) {
                     }
 
                     Column {
+                        SingleChoiceSegmentedButtonRow {
+                            SegmentedButton(
+                                selected = isExpense,
+                                onClick = { if (state.isEditing) isExpense = true },
+                                enabled = state.isEditing,
+                                shape = SegmentedButtonDefaults.itemShape(0, 2)
+                            ) {
+                                Text("Expense")
+                            }
+
+                            SegmentedButton(
+                                selected = !isExpense,
+                                onClick = { if (state.isEditing) isExpense = false },
+                                shape = SegmentedButtonDefaults.itemShape(1, 2)
+                            ) {
+                                Text("Income")
+                            }
+                        }
+
                         OutlinedTextField(
                             value = title,
                             onValueChange = { title = it },
@@ -189,6 +210,9 @@ fun TransactionScreen(transactionId: Int) {
                         OutlinedTextField(
                             value = amount.toString(),
                             onValueChange = { amount = it.toDoubleOrNull() ?: 0.0 },
+                            leadingIcon = {
+                                Text("$")
+                            },
                             label = { Text("Amount") },
                             readOnly = !state.isEditing
                         )

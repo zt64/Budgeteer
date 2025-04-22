@@ -6,7 +6,7 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.ui.graphics.vector.ImageVector
 import dev.zt64.budgeteer.domain.model.Category
 
-val Category.iconAsImageVector: ImageVector
+internal val Category.iconAsImageVector: ImageVector
     get() = when (icon) {
         "food" -> Icons.Default.Fastfood
         "transport" -> Icons.Default.DirectionsCar

@@ -23,6 +23,7 @@ dependencies {
     implementation(libs.sqlite.bundled)
 
     testImplementation(libs.kotlin.test)
+    testImplementation(libs.room.testing)
 }
 
 room {

@@ -4,7 +4,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 
 @Composable
-fun ConfirmDeleteDialog(
+internal fun ConfirmDeleteDialog(
     title: String = "Confirm Delete",
     message: String,
     onConfirm: () -> Unit,

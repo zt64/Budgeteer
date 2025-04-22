@@ -11,6 +11,7 @@ data class Transaction(
     val id: Int = 0,
     val title: String,
     val amount: Double,
+    val isExpense: Boolean = false,
     val date: Instant = Clock.System.now(),
     val description: String? = null,
     val category: Category? = null

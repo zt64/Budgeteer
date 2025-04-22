@@ -16,7 +16,7 @@ fun main() {
 
     singleWindowApplication(title = "Budgeteer") {
         LaunchedEffect(Unit) {
-            window.minimumSize = Dimension(400, 600)
+            window.minimumSize = Dimension(800, 900)
         }
 
         Budgeteer()

@@ -6,8 +6,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import dev.zt64.budgeteer.domain.model.Transaction
 import dev.zt64.budgeteer.ui.LocalSnackbarHostState
 import dev.zt64.budgeteer.ui.dialog.AddTransactionDialog
+import dev.zt64.budgeteer.ui.dialog.FilterDialog
 import dev.zt64.budgeteer.ui.iconAsImageVector
 import dev.zt64.budgeteer.ui.navigation.Destination
 import dev.zt64.budgeteer.ui.navigation.LocalNavigationManager
@@ -23,29 +24,60 @@ import dev.zt64.budgeteer.ui.navigation.currentOrThrow
 import dev.zt64.budgeteer.ui.viewmodel.HistoryViewModel
 import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
+import java.text.SimpleDateFormat
+import kotlin.time.ExperimentalTime
 
 /**
  * An overview of all transactions.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HistoryScreen() {
+internal fun HistoryScreen() {
     val viewModel = koinViewModel<HistoryViewModel>()
     val snackbarHostState = LocalSnackbarHostState.current
 
+    var showFilterDialog by remember { mutableStateOf(false) }
+
+    if (showFilterDialog) {
+        val currentFilter by viewModel.filter.collectAsState()
+        FilterDialog(
+            filter = currentFilter,
+            availableCategories = viewModel.categories.collectAsState(emptyList()).value,
+            onDismissRequest = { showFilterDialog = false },
+            onConfirm = { filter ->
+                viewModel.updateFilter(filter)
+                showFilterDialog = false
+            }
+        )
+    }
+
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { },
-                actions = {
-                    IconButton(onClick = { /* Handle search action */ }) {
-                        Icon(
-                            imageVector = Icons.Default.Search,
-                            contentDescription = "Search transactions"
-                        )
-                    }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                val searchText by viewModel.searchText.collectAsState()
+
+                TextField(
+                    value = searchText,
+                    onValueChange = { viewModel.updateSearchQuery(it) },
+                    label = { Text("Search") },
+                    modifier = Modifier.weight(1f)
+                )
+
+                IconButton(
+                    onClick = { showFilterDialog = true }
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.FilterList,
+                        contentDescription = null
+                    )
                 }
-            )
+            }
         },
         snackbarHost = {
             SnackbarHost(snackbarHostState)
@@ -103,7 +135,12 @@ fun HistoryScreen() {
             } else {
                 val navigationManager = LocalNavigationManager.currentOrThrow
 
-                LazyColumn {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 16.dp),
+                    verticalArrangement = Arrangement.spacedBy(2.dp)
+                ) {
                     items(transactions) { transaction ->
                         TransactionCard(
                             transaction = transaction,
@@ -141,27 +178,73 @@ fun HistoryScreen() {
     }
 }
 
+@OptIn(ExperimentalTime::class)
 @Composable
 private fun TransactionCard(
     transaction: Transaction,
     onClick: () -> Unit
 ) {
-    ListItem(
-        modifier = Modifier.clickable(onClick = onClick),
-        leadingContent = {
+    OutlinedCard {
+        Row(
+            modifier = Modifier
+                .clickable(onClick = onClick)
+                .fillMaxWidth()
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             transaction.category?.iconAsImageVector?.let {
                 Icon(
                     imageVector = it,
                     contentDescription = null
                 )
             }
-        },
-        headlineContent = {
-            Text(transaction.title)
-        },
-        supportingContent = transaction.description?.takeUnless { it.isEmpty() }?.let { { Text(it) } },
-        trailingContent = {
-            Text("$%.2f".format(transaction.amount))
+
+            Column(
+                modifier = Modifier.weight(1f)
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        text = transaction.title,
+                        style = MaterialTheme.typography.titleMedium
+                    )
+
+                    // Format and display the date
+                    Text(
+                        text = SimpleDateFormat("MMM dd, yyyy").format(transaction.date.epochSeconds),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+
+                // Display category name
+                transaction.category?.let {
+                    Text(
+                        text = it.name,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
+
+                transaction.description?.takeUnless { it.isEmpty() }?.let {
+                    Text(it)
+                }
+            }
+
+            Spacer(Modifier.weight(0.2f))
+
+            Text(
+                text = "$%.2f".format(transaction.amount),
+                style = MaterialTheme.typography.titleMedium,
+                color = if (transaction.amount >= 0) {
+                    MaterialTheme.colorScheme.primary
+                } else {
+                    MaterialTheme.colorScheme.error
+                }
+            )
         }
-    )
+    }
 }
