@@ -36,9 +36,8 @@ class HomeViewModel(private val transactionRepository: TransactionRepository, pr
                 transactions.sumOf { it.amount }
             }
 
-        // Map to category objects with their spending
         cats.associateWith { category ->
-            categorySpending[category.id] ?: 5.0
+            categorySpending[category.id] ?: 0.0
         }
     }.stateIn(viewModelScope, SharingStarted.Lazily, emptyMap())
 }

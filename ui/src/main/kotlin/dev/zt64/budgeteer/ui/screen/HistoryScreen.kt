@@ -24,8 +24,10 @@ import dev.zt64.budgeteer.ui.navigation.currentOrThrow
 import dev.zt64.budgeteer.ui.viewmodel.HistoryViewModel
 import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
-import java.text.SimpleDateFormat
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import kotlin.time.ExperimentalTime
+import kotlin.time.toJavaInstant
 
 /**
  * An overview of all transactions.
@@ -214,7 +216,10 @@ private fun TransactionCard(
 
                     // Format and display the date
                     Text(
-                        text = SimpleDateFormat("MMM dd, yyyy").format(transaction.date.epochSeconds),
+                        text = DateTimeFormatter
+                            .ofPattern("MM-dd-yyyy h:mm a")
+                            .withZone(ZoneId.systemDefault()) // Specify time zone for the Instant
+                            .format(transaction.date.toJavaInstant()),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
