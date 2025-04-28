@@ -29,8 +29,11 @@ class HomeViewModel(private val transactionRepository: TransactionRepository, pr
             .filter { it.category != null }
             .groupBy { it.category!! }
             .mapValues { (_, transactions) ->
-                transactions.sumOf { it.amount }
+                transactions
+                    .filter { it.isExpense }
+                    .sumOf { it.amount }
             }
+            .filter { (_, v) -> v > 0.0 }
     }.stateIn(viewModelScope, SharingStarted.Lazily, emptyMap())
 
     suspend fun importTransactions(csv: String): Boolean {
