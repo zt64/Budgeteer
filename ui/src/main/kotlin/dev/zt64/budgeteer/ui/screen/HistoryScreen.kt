@@ -47,6 +47,10 @@ internal fun HistoryScreen(initialFilter: Filter = Filter()) {
 
     val snackbarHostState = LocalSnackbarHostState.current
 
+    LaunchedEffect(initialFilter) {
+        viewModel.updateFilter(initialFilter)
+    }
+
     if (showFilterDialog) {
         val currentFilter by viewModel.filter.collectAsState()
         FilterDialog(
