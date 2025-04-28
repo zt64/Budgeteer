@@ -1,7 +1,6 @@
 package dev.zt64.budgeteer.ui.screen
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
@@ -50,6 +49,7 @@ internal fun HomeScreen() {
     Column(
         modifier = Modifier
             .fillMaxHeight()
+            .verticalScroll(rememberScrollState())
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
