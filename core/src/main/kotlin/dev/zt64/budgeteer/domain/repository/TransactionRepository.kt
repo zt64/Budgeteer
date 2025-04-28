@@ -26,6 +26,10 @@ class TransactionRepository internal constructor(private val transactionDao: Tra
         transactionDao.delete(transactionId)
     }
 
+    suspend fun deleteAll() {
+        transactionDao.deleteAll()
+    }
+
     fun getTransactions(): Flow<List<Transaction>> {
         return transactionDao.getAllTransactions().map {
             it.map(TransactionEntity::toDomainModel)

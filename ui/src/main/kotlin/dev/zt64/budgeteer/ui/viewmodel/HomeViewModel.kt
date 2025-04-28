@@ -100,4 +100,8 @@ class HomeViewModel(private val transactionRepository: TransactionRepository, pr
             }
         }
     }
+
+    suspend fun resetData() {
+        transactionRepository.deleteAll()
+    }
 }

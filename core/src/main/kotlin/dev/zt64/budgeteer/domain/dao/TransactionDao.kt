@@ -22,6 +22,9 @@ internal interface TransactionDao {
     @Query("DELETE FROM TransactionEntity WHERE transactionId = :id")
     suspend fun delete(id: Int)
 
+    @Query("DELETE FROM TransactionEntity")
+    suspend fun deleteAll()
+
     @Query("SELECT * FROM TransactionEntity")
     fun getAllTransactions(): Flow<List<TransactionEntity>>
 

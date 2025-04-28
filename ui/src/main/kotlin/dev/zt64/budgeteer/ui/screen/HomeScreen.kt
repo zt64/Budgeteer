@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.Upload
 import androidx.compose.material3.*
@@ -249,8 +250,7 @@ internal fun HomeScreen() {
             ) {
                 Icon(
                     imageVector = Icons.Default.Upload,
-                    contentDescription = "Import CSV",
-                    tint = MaterialTheme.colorScheme.primary
+                    contentDescription = "Import CSV"
                 )
                 Spacer(Modifier.width(ButtonDefaults.IconSpacing))
                 Text("Import CSV")
@@ -264,11 +264,29 @@ internal fun HomeScreen() {
             ) {
                 Icon(
                     imageVector = Icons.Default.Download,
-                    contentDescription = "Export CSV",
-                    tint = MaterialTheme.colorScheme.primary
+                    contentDescription = "Export CSV"
                 )
                 Spacer(Modifier.width(ButtonDefaults.IconSpacing))
                 Text("Export CSV")
+            }
+
+            Spacer(Modifier.weight(1f))
+
+            OutlinedButton(
+                onClick = {
+                    scope.launch {
+                        viewModel.resetData()
+                        snackbarHostState.showSnackbar("Data reset")
+                    }
+                },
+                contentPadding = ButtonDefaults.ButtonWithIconContentPadding
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Delete,
+                    contentDescription = "Reset Data"
+                )
+                Spacer(Modifier.width(ButtonDefaults.IconSpacing))
+                Text("Reset Data")
             }
         }
     }
