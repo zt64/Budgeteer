@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "5719e5d5d5faf23b6e4ba04095c3410c",
+    "identityHash": "9c2186605f8b80f691c02646e0d15d46",
     "entities": [
       {
         "tableName": "TransactionEntity",
@@ -58,7 +58,7 @@
       },
       {
         "tableName": "CategoryEntity",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`categoryId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `icon` TEXT, `color` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`categoryId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `icon` TEXT, `color` INTEGER)",
         "fields": [
           {
             "fieldPath": "categoryId",
@@ -80,8 +80,7 @@
           {
             "fieldPath": "color",
             "columnName": "color",
-            "affinity": "INTEGER",
-            "notNull": true
+            "affinity": "INTEGER"
           }
         ],
         "primaryKey": {
@@ -94,7 +93,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '5719e5d5d5faf23b6e4ba04095c3410c')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '9c2186605f8b80f691c02646e0d15d46')"
     ]
   }
 }

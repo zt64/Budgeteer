@@ -1,0 +1,36 @@
+package dev.zt64.budgeteer.ui.dialog
+
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+
+@Composable
+fun AboutDialog(onDismissRequest: () -> Unit) {
+    Dialog(
+        onDismissRequest = onDismissRequest,
+        icon = {
+            Icon(
+                imageVector = Icons.Default.Info,
+                contentDescription = "Info"
+            )
+        },
+        title = { Text("About") },
+        confirmButton = {
+            OutlinedButton(onClick = onDismissRequest) {
+                Text("Close")
+            }
+        }
+    ) {
+        Text(
+            text = """
+                Budgeteer is a personal finance application that helps you manage your budget and track your expenses.
+                It is designed to be simple and easy to use, allowing you to focus on what matters most: your finances.
+                
+                Developed for CSCI A360 Software Engineering
+            """.trimIndent()
+        )
+    }
+}

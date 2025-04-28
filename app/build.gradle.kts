@@ -24,6 +24,8 @@ dependencies {
     implementation(libs.bundles.koin)
     implementation(libs.bundles.coroutines)
 
+    implementation(libs.filekit.core)
+
     testImplementation(compose.uiTest)
     testImplementation(libs.kotlin.test)
 }

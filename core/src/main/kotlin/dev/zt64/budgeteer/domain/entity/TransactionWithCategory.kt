@@ -8,8 +8,8 @@ internal data class TransactionWithCategory(
     val transaction: TransactionEntity,
 
     @Relation(
-        parentColumn = "transactionId", // FK in TransactionEntity
-        entityColumn = "categoryId" // PK in CategoryEntity
+        parentColumn = "categoryId",
+        entityColumn = "categoryId"
     )
     val category: CategoryEntity?
 )

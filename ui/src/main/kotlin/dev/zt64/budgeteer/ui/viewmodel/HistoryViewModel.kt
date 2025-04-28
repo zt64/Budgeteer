@@ -6,20 +6,22 @@ import dev.zt64.budgeteer.domain.model.Transaction
 import dev.zt64.budgeteer.domain.repository.CategoryRepository
 import dev.zt64.budgeteer.domain.repository.TransactionRepository
 import dev.zt64.budgeteer.ui.model.Filter
+import dev.zt64.budgeteer.ui.model.SortBy
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 internal class HistoryViewModel(
     private val transactionsRepository: TransactionRepository,
-    private val categoryRepository: CategoryRepository
+    private val categoryRepository: CategoryRepository,
+    initialFilter: Filter
 ) : ViewModel() {
     private val _searchText = MutableStateFlow("")
     val searchText = _searchText.asStateFlow()
 
-    private var _filter = MutableStateFlow<Filter>(Filter())
+    private var _filter = MutableStateFlow(initialFilter)
     val filter = _filter.asStateFlow()
 
-    private val allTransactions = transactionsRepository.getTransactions()
+    private val allTransactions = transactionsRepository.getTransactionsWithCategory()
 
     val categories = categoryRepository.getCategories()
         .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
@@ -47,6 +49,17 @@ internal class HistoryViewModel(
         filtered = filtered.filter { transaction ->
             transaction.amount >= currentFilter.minAmount &&
                 transaction.amount <= currentFilter.maxAmount
+        }
+
+        filtered = when (currentFilter.sortBy) {
+            SortBy.DATE -> filtered.sortedByDescending { it.date }
+            SortBy.AMOUNT -> filtered.sortedByDescending { it.amount }
+            SortBy.TITLE -> filtered.sortedBy { it.title }
+            SortBy.CATEGORY -> filtered.sortedBy { it.category?.name }
+        }
+
+        if (currentFilter.sortAscending) {
+            filtered = filtered.reversed()
         }
 
         filtered

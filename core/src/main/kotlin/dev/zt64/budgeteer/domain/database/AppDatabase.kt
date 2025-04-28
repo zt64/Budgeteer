@@ -31,14 +31,14 @@ internal abstract class AppDatabase : RoomDatabase() {
                     instance?.let { database ->
                         val categoryDao = database.categoryDao()
                         val defaultCategories = listOf(
-                            CategoryEntity(name = "Food", icon = "fastfood", color = 0xFFFF5722),
-                            CategoryEntity(name = "Transport", icon = "directions_car", color = 0xFF2196F3),
-                            CategoryEntity(name = "Entertainment", icon = "movie", color = 0xFF673AB7),
-                            CategoryEntity(name = "Shopping", icon = "shopping_cart", color = 0xFF4CAF50),
-                            CategoryEntity(name = "Health", icon = "fitness_center", color = 0xFFE91E63),
-                            CategoryEntity(name = "Utilities", icon = "electric_bolt", color = 0xFFFF9800),
-                            CategoryEntity(name = "Salary", icon = "monetization_on", color = 0xFF8BC34A),
-                            CategoryEntity(name = "Investment", icon = "trending_up", color = 0xFF00BCD4)
+                            CategoryEntity(name = "Food", icon = "food", color = 0xFFFF5722),
+                            CategoryEntity(name = "Transport", icon = "transport", color = 0xFF2196F3),
+                            CategoryEntity(name = "Entertainment", icon = "entertainment", color = 0xFF673AB7),
+                            CategoryEntity(name = "Shopping", icon = "shopping", color = 0xFF4CAF50),
+                            CategoryEntity(name = "Health", icon = "health", color = 0xFFE91E63),
+                            CategoryEntity(name = "Utilities", icon = "utilities", color = 0xFFFF9800),
+                            CategoryEntity(name = "Salary", icon = "salary", color = 0xFF8BC34A),
+                            CategoryEntity(name = "Investment", icon = "investment", color = 0xFF00BCD4)
                         )
 
                         defaultCategories.forEach { category ->

@@ -8,6 +8,7 @@ koin = "4.0.4"
 coroutines = "1.10.1"
 viewmodel = "2.8.4"
 koalaPlot = "0.8.0"
+filekit = "0.10.0-beta02"
 room = "2.7.0-alpha01"
 sqlite-bundled = "2.4.0"
 
@@ -28,6 +29,8 @@ coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", 
 viewmodel = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "viewmodel" }
 
 koalaPlot-core = { module = "io.github.koalaplot:koalaplot-core", version.ref = "koalaPlot" }
+filekit-core = { module = "io.github.vinceglb:filekit-core", version.ref = "filekit" }
+filekit-compose = { module = "io.github.vinceglb:filekit-dialogs-compose", version.ref = "filekit" }
 
 room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }

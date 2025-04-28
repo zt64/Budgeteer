@@ -12,7 +12,9 @@ class CategoryRepository internal constructor(private val categoryDao: CategoryD
         it.map(CategoryEntity::toDomainModel)
     }
 
-    suspend fun getCategory(name: String) = categoryDao.getCategoryById(name)?.toDomainModel()
+    suspend fun getCategory(name: String) = categoryDao.getCategory(name)?.toDomainModel()
+
+    suspend fun getCategory(id: Int) = categoryDao.getCategoryById(id)?.toDomainModel()
 
     suspend fun addCategory(category: Category) = categoryDao.insert(category.toDatabaseEntity())
 

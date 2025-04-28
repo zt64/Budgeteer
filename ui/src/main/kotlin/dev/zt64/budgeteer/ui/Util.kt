@@ -6,18 +6,21 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.ui.graphics.vector.ImageVector
 import dev.zt64.budgeteer.domain.model.Category
 
+internal val CATEGORY_ICONS = mapOf(
+    "expense" to Icons.Default.Money,
+    "food" to Icons.Default.Fastfood,
+    "transport" to Icons.Default.DirectionsCar,
+    "entertainment" to Icons.Default.Movie,
+    "shopping" to Icons.Default.ShoppingCart,
+    "health" to Icons.Default.FitnessCenter,
+    "travel" to Icons.Default.AirplanemodeActive,
+    "utilities" to Icons.Default.ElectricBolt,
+    "education" to Icons.Default.School,
+    "salary" to Icons.Default.MonetizationOn,
+    "gift" to Icons.Default.CardGiftcard,
+    "investment" to Icons.AutoMirrored.Filled.TrendingUp,
+    "other" to Icons.Default.Info
+)
+
 internal val Category.iconAsImageVector: ImageVector
-    get() = when (icon) {
-        "food" -> Icons.Default.Fastfood
-        "transport" -> Icons.Default.DirectionsCar
-        "entertainment" -> Icons.Default.Movie
-        "shopping" -> Icons.Default.ShoppingCart
-        "health" -> Icons.Default.FitnessCenter
-        "travel" -> Icons.Default.AirplanemodeActive
-        "utilities" -> Icons.Default.ElectricBolt
-        "education" -> Icons.Default.School
-        "salary" -> Icons.Default.MonetizationOn
-        "gift" -> Icons.Default.CardGiftcard
-        "investment" -> Icons.AutoMirrored.Filled.TrendingUp
-        else -> Icons.Default.Info
-    }
+    get() = CATEGORY_ICONS[this.icon] ?: Icons.Default.Info

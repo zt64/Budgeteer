@@ -26,6 +26,7 @@ dependencies {
     implementation(libs.bundles.coroutines)
 
     implementation(libs.koalaPlot.core)
+    implementation(libs.filekit.compose)
 
     testImplementation(compose.uiTest)
     testImplementation(libs.kotlin.test)

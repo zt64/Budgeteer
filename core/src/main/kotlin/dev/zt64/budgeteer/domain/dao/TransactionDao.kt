@@ -8,13 +8,16 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 internal interface TransactionDao {
     @Insert
-    suspend fun insert(category: TransactionEntity)
+    suspend fun insert(transaction: TransactionEntity): Long
+
+    @Insert
+    suspend fun insertAll(transaction: List<TransactionEntity>): List<Long>
 
     @Update
-    suspend fun update(category: TransactionEntity)
+    suspend fun update(transaction: TransactionEntity)
 
     @Delete
-    suspend fun delete(category: TransactionEntity)
+    suspend fun delete(transaction: TransactionEntity)
 
     @Query("DELETE FROM TransactionEntity WHERE transactionId = :id")
     suspend fun delete(id: Int)
@@ -26,6 +29,7 @@ internal interface TransactionDao {
     @Query("SELECT * FROM TransactionEntity")
     fun getAllTransactionsWithCategory(): Flow<List<TransactionWithCategory>>
 
+    @Transaction
     @Query("SELECT * FROM TransactionEntity WHERE transactionId = :transactionId")
     suspend fun getTransactionById(transactionId: Int): TransactionWithCategory?
 }

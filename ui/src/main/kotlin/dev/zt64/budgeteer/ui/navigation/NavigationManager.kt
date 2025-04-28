@@ -16,10 +16,7 @@ internal fun rememberNavigationManager(initialDestination: Destination): Navigat
 }
 
 @Composable
-internal fun NavHost(
-    manager: NavigationManager = rememberNavigationManager(Destination.Home),
-    content: @Composable () -> Unit
-) {
+internal fun NavHost(manager: NavigationManager = rememberNavigationManager(Destination.Home), content: @Composable () -> Unit) {
     CompositionLocalProvider(LocalNavigationManager provides manager, content = content)
 }
 

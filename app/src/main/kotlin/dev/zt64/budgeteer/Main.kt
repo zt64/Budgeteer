@@ -6,6 +6,7 @@ import dev.zt64.budgeteer.di.managerModule
 import dev.zt64.budgeteer.di.repositoryModule
 import dev.zt64.budgeteer.di.viewModelModule
 import dev.zt64.budgeteer.ui.Budgeteer
+import io.github.vinceglb.filekit.FileKit
 import org.koin.core.context.startKoin
 import java.awt.Dimension
 
@@ -13,6 +14,8 @@ fun main() {
     startKoin {
         modules(managerModule, repositoryModule, viewModelModule)
     }
+
+    FileKit.init(appId = "Budgeteer")
 
     singleWindowApplication(title = "Budgeteer") {
         LaunchedEffect(Unit) {

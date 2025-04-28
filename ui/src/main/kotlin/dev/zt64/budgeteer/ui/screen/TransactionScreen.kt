@@ -11,6 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import dev.zt64.budgeteer.ui.LocalSnackbarHostState
+import dev.zt64.budgeteer.ui.component.field.MoneyInputField
 import dev.zt64.budgeteer.ui.dialog.ConfirmDeleteDialog
 import dev.zt64.budgeteer.ui.iconAsImageVector
 import dev.zt64.budgeteer.ui.navigation.LocalNavigationManager
@@ -39,9 +40,9 @@ internal fun TransactionScreen(transactionId: Int) {
             title = "Delete Transaction",
             message = "Are you sure you want to delete this transaction?",
             onConfirm = {
-                viewModel.deleteTransaction()
-                navigationManager.navigateUp()
                 scope.launch {
+                    viewModel.deleteTransaction()
+                    navigationManager.navigateUp()
                     snackbarHostState.showSnackbar("Transaction deleted")
                 }
             },
@@ -129,9 +130,6 @@ internal fun TransactionScreen(transactionId: Int) {
                     }
                 }
             }
-        },
-        snackbarHost = {
-            SnackbarHost(snackbarHostState)
         }
     ) { paddingValues ->
         Box(
@@ -207,13 +205,9 @@ internal fun TransactionScreen(transactionId: Int) {
                             readOnly = !state.isEditing
                         )
 
-                        OutlinedTextField(
-                            value = amount.toString(),
-                            onValueChange = { amount = it.toDoubleOrNull() ?: 0.0 },
-                            leadingIcon = {
-                                Text("$")
-                            },
-                            label = { Text("Amount") },
+                        MoneyInputField(
+                            value = amount,
+                            onValueChange = { amount = it },
                             readOnly = !state.isEditing
                         )
                         var expanded by remember { mutableStateOf(false) }

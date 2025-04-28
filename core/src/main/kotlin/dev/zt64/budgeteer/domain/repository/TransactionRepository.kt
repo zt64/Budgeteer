@@ -14,6 +14,10 @@ class TransactionRepository internal constructor(private val transactionDao: Tra
         transactionDao.insert(transaction.toDatabaseEntity())
     }
 
+    suspend fun addTransactions(transactions: List<Transaction>) {
+        transactionDao.insertAll(transactions.map(Transaction::toDatabaseEntity))
+    }
+
     suspend fun updateTransaction(transaction: Transaction) {
         transactionDao.update(transaction.toDatabaseEntity())
     }
