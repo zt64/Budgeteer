@@ -4,15 +4,14 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 
 @Composable
-internal fun TimePickerDialog(state: TimePickerState, onTimeChange: (minute: Int) -> Unit, onDismissRequest: () -> Unit) {
+internal fun TimePickerDialog(state: TimePickerState, onConfirm: () -> Unit, onDismissRequest: () -> Unit) {
     Dialog(
         onDismissRequest = onDismissRequest,
         title = { Text("Time") },
         confirmButton = {
             Button(
                 onClick = {
-                    onTimeChange(state.hour * 60 + state.minute)
-                    onDismissRequest()
+                    onConfirm()
                 }
             ) {
                 Text("OK")

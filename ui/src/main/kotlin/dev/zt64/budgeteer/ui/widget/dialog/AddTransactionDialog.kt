@@ -1,6 +1,8 @@
 package dev.zt64.budgeteer.ui.widget.dialog
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Category
 import androidx.compose.material.icons.filled.Description
@@ -9,16 +11,14 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import dev.zt64.budgeteer.domain.model.Category
 import dev.zt64.budgeteer.domain.model.Transaction
+import dev.zt64.budgeteer.ui.component.DateTimeField
 import dev.zt64.budgeteer.ui.component.field.MoneyInputField
 import dev.zt64.budgeteer.ui.iconAsImageVector
-import dev.zt64.budgeteer.util.Formatter
-import java.time.ZoneId
-import kotlin.time.*
-import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalTime::class)
 @Composable
@@ -45,6 +45,7 @@ internal fun AddTransactionDialog(categories: List<Category>, onConfirm: (Transa
                             title = title,
                             amount = amount,
                             isExpense = isExpense,
+                            date = dateTime,
                             description = description.ifBlank { null },
                             category = category
                         )
@@ -177,88 +178,6 @@ internal fun AddTransactionDialog(categories: List<Category>, onConfirm: (Transa
                 instant = dateTime,
                 onValueChange = { dateTime = it }
             )
-        }
-    }
-}
-
-@Composable
-private fun DateTimeField(instant: Instant, onValueChange: (Instant) -> Unit) {
-    var showDateDialog by remember { mutableStateOf(false) }
-    var showTimeDialog by remember { mutableStateOf(false) }
-
-    val datePickerState = rememberDatePickerState(initialSelectedDateMillis = instant.toEpochMilliseconds())
-    val timePickerState = rememberTimePickerState(
-        initialHour = instant.toJavaInstant().atZone(ZoneId.systemDefault()).hour,
-        initialMinute = instant.toJavaInstant().atZone(ZoneId.systemDefault()).minute,
-        is24Hour = false
-    )
-
-    if (showDateDialog) {
-        DatePickerDialog(
-            onDismissRequest = { showDateDialog = false },
-            confirmButton = {
-                Button(
-                    onClick = {
-                        // onValueChange()
-                        showDateDialog = false
-                    }
-                ) {
-                    Text("OK")
-                }
-            },
-            dismissButton = {
-                OutlinedButton(onClick = { showDateDialog = false }) {
-                    Text("Cancel")
-                }
-            }
-        ) {
-            DatePicker(state = datePickerState)
-        }
-    }
-
-    if (showTimeDialog) {
-        TimePickerDialog(
-            state = timePickerState,
-            onTimeChange = { minute ->
-                onValueChange(Clock.System.now() + minute.minutes)
-            },
-            onDismissRequest = { showTimeDialog = false }
-        )
-    }
-
-    Row(
-        modifier = Modifier.padding(8.dp),
-        horizontalArrangement = Arrangement.spacedBy(4.dp)
-    ) {
-        ProvideTextStyle(
-            value = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold)
-        ) {
-            val color = MaterialTheme.colorScheme.tertiary
-
-            Surface(
-                onClick = { showDateDialog = true },
-                color = color,
-                shape = MaterialTheme.shapes.small
-            ) {
-                Text(
-                    modifier = Modifier.padding(8.dp),
-                    text = Formatter.formatDate(datePickerState.selectedDateMillis!!)
-                )
-            }
-
-            Surface(
-                onClick = { showTimeDialog = true },
-                color = color,
-                shape = MaterialTheme.shapes.small
-            ) {
-                Text(
-                    modifier = Modifier.padding(8.dp),
-                    text = Formatter.formatTime(
-                        timePickerState.hour,
-                        timePickerState.minute
-                    )
-                )
-            }
         }
     }
 }

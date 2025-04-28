@@ -40,9 +40,12 @@ import kotlin.time.ExperimentalTime
 @Composable
 internal fun HistoryScreen(initialFilter: Filter = Filter()) {
     val viewModel = koinViewModel<HistoryViewModel> { parametersOf(initialFilter) }
-    val snackbarHostState = LocalSnackbarHostState.current
+    val categories by viewModel.categories.collectAsState(emptyList())
 
     var showFilterDialog by remember { mutableStateOf(false) }
+    var showAddDialog by remember { mutableStateOf(false) }
+
+    val snackbarHostState = LocalSnackbarHostState.current
 
     if (showFilterDialog) {
         val currentFilter by viewModel.filter.collectAsState()
@@ -54,6 +57,21 @@ internal fun HistoryScreen(initialFilter: Filter = Filter()) {
                 viewModel.updateFilter(filter)
                 showFilterDialog = false
             }
+        )
+    }
+
+    if (showAddDialog) {
+        val scope = rememberCoroutineScope()
+
+        AddTransactionDialog(
+            categories = categories,
+            onConfirm = {
+                scope.launch {
+                    viewModel.addTransaction(it)
+                    snackbarHostState.showSnackbar("Transaction added")
+                }
+            },
+            onDismissRequest = { showAddDialog = false }
         )
     }
 
@@ -109,29 +127,22 @@ internal fun HistoryScreen(initialFilter: Filter = Filter()) {
                     )
                 }
             }
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = { showAddDialog = true }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = "Add Transaction"
+                )
+            }
         }
     ) { paddingValues ->
         val transactions by viewModel.transactions.collectAsState(emptyList())
-        val categories by viewModel.categories.collectAsState(emptyList())
         val filter by viewModel.filter.collectAsState()
 
-        val scope = rememberCoroutineScope()
-        var showAddDialog by remember { mutableStateOf(false) }
-
         val navigationManager = LocalNavigationManager.currentOrThrow
-
-        if (showAddDialog) {
-            AddTransactionDialog(
-                categories = categories,
-                onConfirm = {
-                    viewModel.addTransaction(it)
-                    scope.launch {
-                        snackbarHostState.showSnackbar("Transaction added")
-                    }
-                },
-                onDismissRequest = { showAddDialog = false }
-            )
-        }
 
         LazyColumn(
             modifier = Modifier

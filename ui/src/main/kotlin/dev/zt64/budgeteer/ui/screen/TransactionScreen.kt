@@ -75,9 +75,9 @@ internal fun LoadedTransactionScreen(transactionId: Int) {
             onConfirm = {
                 scope.launch {
                     viewModel.deleteTransaction()
-                    navigationManager.navigateUp()
                     snackbarHostState.showSnackbar("Transaction deleted")
                 }
+                navigationManager.navigateUp()
             },
             onDismiss = { showDeleteDialog = false }
         )
