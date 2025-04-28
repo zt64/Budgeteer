@@ -9,7 +9,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import dev.zt64.budgeteer.ui.dialog.AboutDialog
 import dev.zt64.budgeteer.ui.navigation.Destination
 import dev.zt64.budgeteer.ui.navigation.NavHost
 import dev.zt64.budgeteer.ui.navigation.rememberNavigationManager
@@ -17,6 +16,7 @@ import dev.zt64.budgeteer.ui.screen.HistoryScreen
 import dev.zt64.budgeteer.ui.screen.HomeScreen
 import dev.zt64.budgeteer.ui.screen.TransactionScreen
 import dev.zt64.budgeteer.ui.theme.Theme
+import dev.zt64.budgeteer.ui.widget.dialog.AboutDialog
 
 @Composable
 fun Budgeteer() {

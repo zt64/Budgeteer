@@ -12,12 +12,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import dev.zt64.budgeteer.ui.LocalSnackbarHostState
 import dev.zt64.budgeteer.ui.component.field.MoneyInputField
-import dev.zt64.budgeteer.ui.dialog.ConfirmDeleteDialog
 import dev.zt64.budgeteer.ui.iconAsImageVector
 import dev.zt64.budgeteer.ui.navigation.LocalNavigationManager
 import dev.zt64.budgeteer.ui.navigation.currentOrThrow
 import dev.zt64.budgeteer.ui.viewmodel.TransactionUiState
 import dev.zt64.budgeteer.ui.viewmodel.TransactionViewModel
+import dev.zt64.budgeteer.ui.widget.dialog.ConfirmDeleteDialog
 import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf

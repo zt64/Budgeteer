@@ -18,8 +18,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import dev.zt64.budgeteer.domain.model.Transaction
 import dev.zt64.budgeteer.ui.LocalSnackbarHostState
-import dev.zt64.budgeteer.ui.dialog.AddTransactionDialog
-import dev.zt64.budgeteer.ui.dialog.FilterDialog
 import dev.zt64.budgeteer.ui.iconAsImageVector
 import dev.zt64.budgeteer.ui.model.Filter
 import dev.zt64.budgeteer.ui.model.SortBy
@@ -27,6 +25,8 @@ import dev.zt64.budgeteer.ui.navigation.Destination
 import dev.zt64.budgeteer.ui.navigation.LocalNavigationManager
 import dev.zt64.budgeteer.ui.navigation.currentOrThrow
 import dev.zt64.budgeteer.ui.viewmodel.HistoryViewModel
+import dev.zt64.budgeteer.ui.widget.dialog.AddTransactionDialog
+import dev.zt64.budgeteer.ui.widget.dialog.FilterDialog
 import dev.zt64.budgeteer.util.Formatter
 import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel

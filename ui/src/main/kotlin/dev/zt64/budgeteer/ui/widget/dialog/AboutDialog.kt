@@ -1,4 +1,4 @@
-package dev.zt64.budgeteer.ui.dialog
+package dev.zt64.budgeteer.ui.widget.dialog
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
