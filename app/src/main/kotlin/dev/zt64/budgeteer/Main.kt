@@ -19,8 +19,8 @@ fun main() {
 
     singleWindowApplication(title = "Budgeteer") {
         LaunchedEffect(Unit) {
-            window.minimumSize = Dimension(800, 1200)
-            window.maximumSize = Dimension(800, 1200)
+            window.minimumSize = Dimension(800, 1000)
+            window.maximumSize = Dimension(800, 1000)
             window.setLocationRelativeTo(null)
         }
 
