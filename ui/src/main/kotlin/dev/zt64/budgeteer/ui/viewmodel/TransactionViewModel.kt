@@ -44,20 +44,25 @@ internal class TransactionViewModel(
     fun updateTransaction(transaction: Transaction) {
         viewModelScope.launch {
             transactionRepository.updateTransaction(transaction)
+            _uiState.emit(TransactionUiState.Loaded(transaction))
         }
     }
 
     fun enterEditMode() {
         val currentState = _uiState.value
         if (currentState is TransactionUiState.Loaded) {
-            _uiState.value = currentState.copy(isEditing = true)
+            viewModelScope.launch {
+                _uiState.emit(currentState.copy(isEditing = true))
+            }
         }
     }
 
     fun exitEditMode() {
         val currentState = _uiState.value
         if (currentState is TransactionUiState.Loaded) {
-            _uiState.value = currentState.copy(isEditing = false)
+            viewModelScope.launch {
+                _uiState.emit(currentState.copy(isEditing = false))
+            }
         }
     }
 }
