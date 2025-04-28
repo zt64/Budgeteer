@@ -26,8 +26,7 @@ fun AboutDialog(onDismissRequest: () -> Unit) {
     ) {
         Text(
             text = """
-                Budgeteer is a personal finance application that helps you manage your budget and track your expenses.
-                It is designed to be simple and easy to use, allowing you to focus on what matters most: your finances.
+                Budgeteer is a personal finance application that helps you track your expenses and income.
                 
                 Developed for CSCI A360 Software Engineering
             """.trimIndent()
