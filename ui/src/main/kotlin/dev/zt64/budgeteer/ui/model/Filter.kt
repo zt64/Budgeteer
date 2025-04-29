@@ -5,7 +5,7 @@ import dev.zt64.budgeteer.domain.model.Category
 
 @Stable
 internal data class Filter(
-    val categories: List<Category> = emptyList(),
+    val categories: Set<Category> = emptySet(),
     val minAmount: Float = 0f,
     val maxAmount: Float = 10000f,
     val sortBy: SortBy = SortBy.DATE,

@@ -11,7 +11,7 @@ internal sealed class Destination(val icon: ImageVector, val label: String) {
     data object Home : Destination(Icons.Default.Home, "Home")
 
     open class History(val filter: Filter = Filter()) : Destination(Icons.Default.History, "History") {
-        constructor(category: Category) : this(Filter(categories = listOf(category)))
+        constructor(category: Category) : this(Filter(categories = setOf(category)))
 
         companion object Default : History()
 

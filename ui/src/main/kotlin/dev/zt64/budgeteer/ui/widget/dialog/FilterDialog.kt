@@ -149,7 +149,7 @@ internal fun FilterDialog(
                     .height(220.dp)
             ) {
                 items(availableCategories) { category ->
-                    var checked by remember { mutableStateOf(category in categories) }
+                    var checked by remember(categories) { mutableStateOf(category in categories) }
 
                     Row(
                         modifier = Modifier

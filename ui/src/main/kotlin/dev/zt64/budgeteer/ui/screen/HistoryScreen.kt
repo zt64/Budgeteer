@@ -1,11 +1,10 @@
 package dev.zt64.budgeteer.ui.screen
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Sort
@@ -151,70 +150,72 @@ internal fun HistoryScreen(initialFilter: Filter = Filter()) {
         LazyColumn(
             modifier = Modifier
                 .padding(paddingValues)
-                .fillMaxSize()
-                .padding(horizontal = 16.dp),
+                .fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(2.dp)
         ) {
-            stickyHeader {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .horizontalScroll(rememberScrollState()),
-                    horizontalArrangement = Arrangement.spacedBy(3.dp)
-                ) {
-                    if (filter.sortBy != SortBy.DATE) {
-                        InputChip(
-                            selected = true,
-                            onClick = { },
-                            label = {
-                                Text(filter.sortBy.displayName)
-                            },
-                            leadingIcon = {
-                                Icon(
-                                    imageVector = Icons.AutoMirrored.Filled.Sort,
-                                    contentDescription = null
+            if (filter.categories.isNotEmpty()) {
+                stickyHeader {
+                    Surface {
+                        val showClearButton by derivedStateOf { filter != Filter() }
+
+                        LazyRow(
+                            modifier = Modifier.fillMaxWidth(),
+                            contentPadding = PaddingValues(horizontal = 16.dp),
+                            horizontalArrangement = Arrangement.spacedBy(3.dp)
+                        ) {
+                            if (filter.sortBy != SortBy.DATE) {
+                                item {
+                                    InputChip(
+                                        selected = true,
+                                        onClick = { },
+                                        label = { Text(filter.sortBy.displayName) },
+                                        leadingIcon = {
+                                            Icon(
+                                                imageVector = Icons.AutoMirrored.Filled.Sort,
+                                                contentDescription = null
+                                            )
+                                        }
+                                    )
+                                }
+                            }
+
+                            items(filter.categories.toList()) {
+                                FilterChip(
+                                    selected = true,
+                                    onClick = {
+                                        viewModel.updateFilter(filter.copy(categories = filter.categories - it))
+                                    },
+                                    label = { Text(it.name) },
+                                    leadingIcon = {
+                                        Icon(
+                                            imageVector = it.iconAsImageVector,
+                                            contentDescription = null
+                                        )
+                                    },
+                                    trailingIcon = {
+                                        Icon(
+                                            imageVector = Icons.Default.Close,
+                                            contentDescription = null
+                                        )
+                                    }
                                 )
                             }
-                        )
-                    }
 
-                    filter.categories.forEach {
-                        FilterChip(
-                            selected = true,
-                            onClick = {
-                                viewModel.updateFilter(filter.copy(categories = filter.categories - it))
-                            },
-                            label = { Text(it.name) },
-                            leadingIcon = {
-                                Icon(
-                                    imageVector = it.iconAsImageVector,
-                                    contentDescription = null
-                                )
-                            },
-                            trailingIcon = {
-                                Icon(
-                                    imageVector = Icons.Default.Close,
-                                    contentDescription = null
-                                )
+                            if (showClearButton) {
+                                item {
+                                    AssistChip(
+                                        onClick = { viewModel.updateFilter(Filter()) },
+                                        label = { Text("Reset filter") },
+                                        leadingIcon = {
+                                            Icon(
+                                                imageVector = Icons.Default.Clear,
+                                                contentDescription = null
+                                            )
+                                        }
+                                    )
+                                }
                             }
-                        )
-                    }
-
-                    Spacer(Modifier.weight(1f))
-
-                    val showClearButton by derivedStateOf { filter != Filter() }
-
-                    if (showClearButton) {
-                        AssistChip(
-                            onClick = { viewModel.updateFilter(Filter()) },
-                            label = { Text("Reset filter") },
-                            leadingIcon = {
-                                Icon(
-                                    imageVector = Icons.Default.Clear,
-                                    contentDescription = null
-                                )
-                            }
-                        )
+                        }
                     }
                 }
             }
@@ -243,6 +244,7 @@ internal fun HistoryScreen(initialFilter: Filter = Filter()) {
             } else {
                 items(transactions) { transaction ->
                     TransactionCard(
+                        modifier = Modifier.padding(horizontal = 16.dp),
                         transaction = transaction,
                         onClick = {
                             navigationManager.navigate(Destination.Transaction(transaction.id))
@@ -277,8 +279,8 @@ internal fun HistoryScreen(initialFilter: Filter = Filter()) {
 
 @OptIn(ExperimentalTime::class)
 @Composable
-private fun TransactionCard(transaction: Transaction, onClick: () -> Unit) {
-    OutlinedCard {
+private fun TransactionCard(transaction: Transaction, onClick: () -> Unit, modifier: Modifier = Modifier) {
+    OutlinedCard(modifier) {
         Row(
             modifier = Modifier
                 .clickable(onClick = onClick)
